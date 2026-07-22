@@ -1,0 +1,71 @@
+"""
+# Simple ATM Login System (Beautiful Version)
+
+โปรแกรมจำลองระบบเข้าสู่ระบบของตู้ ATM พร้อม UI บน Terminal
+มีลูกเล่นการใช้สี, กรอบข้อความ และการหน่วงเวลาเพื่อความสมจริง
+
+## การทำงานของโปรแกรม
+- ผู้ใช้ต้องกรอกรหัส PIN ให้ถูกต้อง (ค่าเริ่มต้นคือ `1234`)
+- อนุญาตให้กรอกรหัสผิดได้สูงสุด 3 ครั้ง
+- หากกรอกถูก จะแสดงข้อความเข้าสู่ระบบสำเร็จ (สีเขียว)
+- หากกรอกผิดครบ 3 ครั้ง ระบบจะแจ้งเตือนว่าระงับบัญชี (สีแดง)
+
+## วิธีรันโปรแกรม
+รันสคริปต์ผ่าน Terminal หรือ Command Prompt:
+python atm_login.py
+"""
+
+import time
+
+def atm_login():
+    # กำหนดรหัสสีสำหรับตกแต่ง Terminal
+    CYAN = '\033[96m'
+    GREEN = '\033[92m'
+    RED = '\033[91m'
+    YELLOW = '\033[93m'
+    RESET = '\033[0m'
+    BOLD = '\033[1m'
+
+    max_attempts = 3
+    current_attempts = 0
+    is_unlocked = False
+    correct_pin = "1234"
+
+    # ส่วนหัวของโปรแกรม (ตกแต่งด้วยกรอบและสีฟ้า)
+    print(f"\n{CYAN}{BOLD}======================================={RESET}")
+    print(f"{CYAN}{BOLD}         🌟 PYTHON BANK ATM 🌟        {RESET}")
+    print(f"{CYAN}{BOLD}======================================={RESET}\n")
+
+    # วนลูปตรวจสอบรหัสผ่าน
+    while current_attempts < max_attempts and not is_unlocked:
+        # รับค่าด้วยลูกศรและสีเหลือง
+        pin_code = input(f"{YELLOW}▶ Please enter your 4-digit PIN:{RESET} ")
+        
+        # เพิ่มลูกเล่นดีเลย์ให้ดูเหมือนกำลังประมวลผล
+        print(f"⏳ Verifying...", end="\r")
+        time.sleep(1.2)  
+        
+        # ล้างบรรทัด Verifying
+        print("                ", end="\r") 
+        
+        if pin_code == correct_pin:
+            is_unlocked = True
+            print(f"\n{GREEN}{BOLD}✅ Login Successful! Welcome to your account.{RESET}\n")
+        else:
+            current_attempts += 1
+            attempts_left = max_attempts - current_attempts
+            
+            print(f"{RED}❌ Incorrect PIN.{RESET} ", end="")
+            if attempts_left > 0:
+                print(f"You have {YELLOW}{attempts_left}{RESET} attempts left.\n")
+            else:
+                print("\n")
+            
+    # ตรวจสอบสถานะตอนจบว่าบัตรโดนระงับหรือไม่
+    if not is_unlocked:
+        print(f"{RED}{BOLD}🚨 ACCOUNT LOCKED: Maximum attempts exceeded.{RESET}")
+        print(f"{RED}Please contact your local branch for support.{RESET}\n")
+
+# สั่งรันโปรแกรม
+if __name__ == "__main__":
+    atm_login()
